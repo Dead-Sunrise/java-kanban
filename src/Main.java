@@ -1,3 +1,9 @@
+import taskmanagement.Status;
+import controller.TaskManager;
+import taskmanagement.Epic;
+import taskmanagement.SubTask;
+import taskmanagement.Task;
+
 public class Main {
     public static void main(String[] args) {
         TaskManager manager = new TaskManager();
@@ -15,9 +21,9 @@ public class Main {
                 Status.IN_PROGRESS);
         manager.createSubTask(new SubTask("Подзадача 1 Эпик 2", "Описание подзадачи"), 3,
                 Status.DONE);
-        manager.getAllTasks();
-        manager.getAllEpics();
-        manager.getAllSubTasks();
+        System.out.println(manager.getAllTasks());
+        System.out.println(manager.getAllEpics());
+        System.out.println(manager.getAllSubTasks());
         System.out.println("");
         System.out.println("Изменяю название и статус у одной задачи и двух подзадач," +
                 " вывожу список подзадач первого эпика:");
@@ -28,9 +34,9 @@ public class Main {
                 2, 5, Status.IN_PROGRESS);
         manager.updateSubTask(new SubTask("Новая подзадача 3", "Описание"),
                 2, 6, Status.NEW);
-        manager.getAllTasks();
-        manager.getAllEpics();
-        manager.getAllSubTasks();
+        System.out.println(manager.getAllTasks());
+        System.out.println(manager.getAllEpics());
+        System.out.println(manager.getAllSubTasks());
         manager.getAllEpicSubTasks(2);
         System.out.println("");
         System.out.println("Удаляю одну задачу, один эпик, одну подзадачу у первого эпика:");
@@ -38,8 +44,8 @@ public class Main {
         manager.deleteTaskById(1);
         manager.deleteEpicById(3);
         manager.deleteSubTaskById(5);
-        manager.getAllTasks();
-        manager.getAllEpics();
-        manager.getAllSubTasks();
+        System.out.println(manager.getAllTasks());
+        System.out.println(manager.getAllEpics());
+        System.out.println(manager.getAllSubTasks());
     }
 }

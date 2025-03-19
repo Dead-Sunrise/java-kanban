@@ -1,3 +1,5 @@
+package taskmanagement;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -11,7 +13,10 @@ public class Epic extends Task {
         return subTaskList;
     }
 
-    public void setSubTaskList(SubTask subTask) {
+    public void setSubTaskList(ArrayList<SubTask> newSubTaskList) {
+        subTaskList = newSubTaskList;
+    }
+    public void addToSubTask(SubTask subTask) {
         subTaskList.add(subTask);
     }
 
