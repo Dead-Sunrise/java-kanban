@@ -1,3 +1,4 @@
+import controller.InMemoryTaskManager;
 import taskmanagement.Status;
 import controller.TaskManager;
 import taskmanagement.Epic;
@@ -6,7 +7,7 @@ import taskmanagement.Task;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        InMemoryTaskManager manager = new InMemoryTaskManager();
         System.out.println("Создаю две задачи, два эпика, три подзадачи к первому эпику, одна ко второму:");
         System.out.println("");
         manager.createTask(new Task("Задача 1", "Описание"), Status.NEW);
@@ -26,7 +27,7 @@ public class Main {
         System.out.println(manager.getAllSubTasks());
         System.out.println("");
         System.out.println("Изменяю название и статус у одной задачи и двух подзадач," +
-                " вывожу список подзадач первого эпика:");
+                " вывожу список подзадач первого эпика. " + "Получаю 11 задач по id и вывожу историю просмотров");
         System.out.println("");
         manager.updateTask(new Task("Новая задача 1", "Описание"),
                 1, Status.DONE);
@@ -37,6 +38,19 @@ public class Main {
         System.out.println(manager.getAllTasks());
         System.out.println(manager.getAllEpics());
         System.out.println(manager.getAllSubTasks());
+        manager.getTaskById(0);
+        manager.getTaskById(1);
+        manager.getTaskById(1);
+        manager.getEpicById(3);
+        manager.getEpicById(2);
+        manager.getSubTaskById(5);
+        manager.getTaskById(0);
+        manager.getTaskById(1);
+        manager.getTaskById(1);
+        manager.getEpicById(3);
+        manager.getEpicById(2);
+        manager.getSubTaskById(5);
+        System.out.println(manager.getHistory());
         manager.getAllEpicSubTasks(2);
         System.out.println("");
         System.out.println("Удаляю одну задачу, один эпик, одну подзадачу у первого эпика:");
