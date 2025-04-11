@@ -49,7 +49,7 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer keys : epics.keySet()) {
             Epic epic = epics.get(keys);
             epic.setStatus(Status.NEW);
-            epic.addToSubTask(null);
+            epic.setSubTaskList(new ArrayList<>());
             epics.put(keys, epic);
         }
     }
