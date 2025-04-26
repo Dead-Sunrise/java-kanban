@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    Map<Integer, Node<Task>> historyTask = new HashMap<>();
-    Node<Task> head;
-    Node<Task> tail;
+    Map<Integer, Node> historyTask = new HashMap<>();
+    Node head;
+    Node tail;
 
     public void linkLast(Task task) {
         int id = task.getId();
-        final Node<Task> oldTail = tail;
-        final Node<Task> newNode = new Node<>(task, tail, null);
+        final Node oldTail = tail;
+        final Node newNode = new Node(task, tail, null);
         tail = newNode;
         if (oldTail == null) {
             head = newNode;
@@ -30,7 +30,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public List<Task> getHistory() {
         List<Task> historyList = new ArrayList<>();
-        Node<Task> node = head;
+        Node node = head;
         while (node != null) {
             historyList.add(node.task);
             node = node.next;
@@ -38,9 +38,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         return historyList;
     }
 
-    public void removeNode(Node<Task> node) {
-        Node<Task> prevNode = node.prev;
-        Node<Task> nextNode = node.next;
+    public void removeNode(Node node) {
+        Node prevNode = node.prev;
+        Node nextNode = node.next;
         if (node == null) return;
         if (prevNode != null) prevNode.next = nextNode;
         if (nextNode != null) nextNode.prev = prevNode;
@@ -52,7 +52,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public void add(Task task) {
         if (historyTask.containsKey(task.getId())) {
-            Node<Task> deleteNode = historyTask.get(task.getId());
+            Node deleteNode = historyTask.get(task.getId());
             removeNode(deleteNode);
             linkLast(task);
         } else {
@@ -64,7 +64,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public void remove(int id) {
         if (historyTask.containsKey(id)) {
-            Node<Task> node = historyTask.get(id);
+            Node node = historyTask.get(id);
             removeNode(node);
             historyTask.remove(id);
         } else {
