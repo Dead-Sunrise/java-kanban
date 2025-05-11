@@ -27,4 +27,9 @@ public class Epic extends Task {
     public void deleteSubTask(SubTask subTask) {
         subTaskList.remove(subTask);
     }
+
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.EPIC;
+    }
 }

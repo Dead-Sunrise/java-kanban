@@ -17,10 +17,13 @@ public class SubTask extends Task {
     }
 
     @Override
+    public TaskType getTaskType() {
+        return TaskType.SUBTASK;
+    }
+
+    @Override
     public String toString() {
-        return "id = " + getId() + ", epicId = " + getEpicId() +
-                ", Название = " + getName() +
-                ", Описание = " + getDescription() +
-                ", Статус = " + getStatus();
+        return getId() + "," + getTaskType() + "," + getName() + "," + getStatus() +
+                "," + getDescription() + "," + getEpicId();
     }
 }
