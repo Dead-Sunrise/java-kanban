@@ -37,6 +37,10 @@ public class Task {
         status = newStatus;
     }
 
+    public TaskType getTaskType() {
+        return TaskType.TASK;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,9 +56,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return "id = " + id +
-                ", Название = " + name +
-                ", Описание = " + description +
-                ", Статус = " + status;
+        return id + "," + getTaskType() + "," + name + "," + status + "," + description;
     }
 }

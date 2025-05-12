@@ -6,14 +6,18 @@ import taskmanagement.Status;
 import taskmanagement.SubTask;
 import taskmanagement.Task;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
     InMemoryTaskManager taskManager;
+
     @BeforeEach
     void newTaskManager() {
         taskManager = new InMemoryTaskManager();
     }
+
     @Test
     void testDifferentTypesOfTasksAndGetById() { // добавление задач разного типа и их получение по id
         Task task = new Task("Задача", "Описание");
@@ -50,5 +54,21 @@ class InMemoryTaskManagerTest {
         assertNull(taskManager.getTaskById(5));
         assertNotNull(taskManager.getTaskById(0));
         assertNotNull(taskManager.getTaskById(1));
+    }
+
+    @Test
+    void testDeleteSubTask() { // тест удаления подзадачи из спика подзадач эпика при удалении из менеджера
+        Epic epic = new Epic("Эпик", "Описание");
+        taskManager.createEpic(epic);
+        SubTask subTask1 = new SubTask("Подзадача1", "Описание1");
+        taskManager.createSubTask(subTask1, 0, Status.NEW);
+        SubTask subTask2 = new SubTask("Подзадача2", "Описание2");
+        taskManager.createSubTask(subTask2, 0, Status.NEW);
+        SubTask subTask3 = new SubTask("Подзадача3", "Описание3");
+        taskManager.createSubTask(subTask3, 0, Status.NEW);
+        List<SubTask> epicSubTasks = taskManager.getAllEpicSubTasks(0);
+        assertEquals(3, epicSubTasks.size());
+        taskManager.deleteSubTaskById(1);
+        assertEquals(2, epicSubTasks.size(), "подзадача удалена некорректно");
     }
 }
