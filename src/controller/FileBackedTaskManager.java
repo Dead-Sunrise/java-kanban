@@ -6,13 +6,35 @@ import java.io.*;
 import java.nio.file.Path;
 
 import static java.lang.Integer.parseInt;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     public Path path;
-    public String firstString = "id,type,name,status,description,epic\n";
+    public String HEAD = "id,type,name,status,description,epic\n";
 
     public FileBackedTaskManager(Path path) {
         this.path = path;
+    }
+
+    public static void main(String[] args) throws IOException {
+        File file = File.createTempFile("test", ".csv");
+        FileBackedTaskManager manager = new FileBackedTaskManager(file.toPath());
+        Task task1 = new Task("Задача 1", "Описание 1");
+        Task task2 = new Task("Задача 2", "Описание 2");
+        Epic epic = new Epic("Эпик 1", "Описание 1");
+        SubTask subTask = new SubTask("Подзадача 1", "Описание 1");
+        manager.createTask(task1, Status.NEW);
+        manager.createTask(task2, Status.NEW);
+        manager.createEpic(epic);
+        manager.createSubTask(subTask, 2, Status.NEW);
+        FileBackedTaskManager newManager = FileBackedTaskManager.loadFromFile(file);
+        if (manager.getAllTasks().equals(newManager.getAllTasks()) &&
+                manager.getAllEpics().equals(newManager.getAllEpics()) &&
+                manager.getAllSubTasks().equals(newManager.getAllSubTasks())) {
+            System.out.println("Файл загружен корректно.");
+        } else {
+            System.out.println("Ошибка загрузки файла");
+        }
     }
 
     public static Task fromString(String value) {
@@ -40,7 +62,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public void save() {
         try (FileWriter fileWriter = new FileWriter(path.toString())) {
-            fileWriter.write(firstString);
+            fileWriter.write(HEAD);
             for (Integer key : tasks.keySet()) {
                 fileWriter.write(tasks.get(key).toString() + "\n");
             }
