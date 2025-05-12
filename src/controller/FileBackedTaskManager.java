@@ -6,11 +6,10 @@ import java.io.*;
 import java.nio.file.Path;
 
 import static java.lang.Integer.parseInt;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     public Path path;
-    public String HEAD = "id,type,name,status,description,epic\n";
+    private static final String HEAD = "id,type,name,status,description,epic\n";
 
     public FileBackedTaskManager(Path path) {
         this.path = path;
