@@ -22,6 +22,11 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
+    void testEmptyHistoryTask() { //проверка пуст ли список при создании объекта
+        assertTrue(taskManager.getHistory().isEmpty(), "Список не пуст");
+    }
+
+    @Test
     void testHistorySize() { // тест размера списка истории просмотров, если добавлено больше 10 элементов
         Task task1 = new Task("Задача 1", "Описание 1");
         taskManager.createTask(task1, Status.NEW);

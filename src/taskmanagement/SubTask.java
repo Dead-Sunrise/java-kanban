@@ -1,11 +1,13 @@
 package taskmanagement;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class SubTask extends Task {
     private int epicId;
 
-    public SubTask(String name, String description) {
-        super(name, description);
-
+    public SubTask(String name, String description, LocalDateTime startTime, Duration duration) {
+        super(name, description, startTime, duration);
     }
 
     public int getEpicId() {
@@ -23,7 +25,7 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return getId() + "," + getTaskType() + "," + getName() + "," + getStatus() +
-                "," + getDescription() + "," + getEpicId();
+        return getId() + "," + getTaskType() + "," + getName() + "," + getStatus() + "," + getDescription() +
+                "," + getStartTime() + "," + getDuration() + "," + getEndTime() + "," + getEpicId();
     }
 }

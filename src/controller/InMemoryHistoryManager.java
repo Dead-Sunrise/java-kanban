@@ -67,8 +67,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             Node node = historyTask.get(id);
             removeNode(node);
             historyTask.remove(id);
-        } else {
-            return;
         }
     }
 }

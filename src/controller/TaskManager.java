@@ -8,6 +8,7 @@ import taskmanagement.Task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface TaskManager {
     Map<Integer, Task> getAllTasks();
@@ -51,4 +52,6 @@ public interface TaskManager {
     ArrayList<SubTask> getAllEpicSubTasks(int id);
 
     public List<Task> getHistory();
+
+    public Set<Task> getPrioritizedTasks();
 }

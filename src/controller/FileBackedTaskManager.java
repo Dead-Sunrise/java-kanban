@@ -4,36 +4,17 @@ import taskmanagement.*;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static java.lang.Integer.parseInt;
 
-public class FileBackedTaskManager extends InMemoryTaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     public Path path;
-    private static final String HEAD = "id,type,name,status,description,epic\n";
+    private static final String HEAD = "id,type,name,status,description,startTime,duration,endTime,epic\n";
 
     public FileBackedTaskManager(Path path) {
         this.path = path;
-    }
-
-    public static void main(String[] args) throws IOException {
-        File file = File.createTempFile("test", ".csv");
-        FileBackedTaskManager manager = new FileBackedTaskManager(file.toPath());
-        Task task1 = new Task("Задача 1", "Описание 1");
-        Task task2 = new Task("Задача 2", "Описание 2");
-        Epic epic = new Epic("Эпик 1", "Описание 1");
-        SubTask subTask = new SubTask("Подзадача 1", "Описание 1");
-        manager.createTask(task1, Status.NEW);
-        manager.createTask(task2, Status.NEW);
-        manager.createEpic(epic);
-        manager.createSubTask(subTask, 2, Status.NEW);
-        FileBackedTaskManager newManager = FileBackedTaskManager.loadFromFile(file);
-        if (manager.getAllTasks().equals(newManager.getAllTasks()) &&
-                manager.getAllEpics().equals(newManager.getAllEpics()) &&
-                manager.getAllSubTasks().equals(newManager.getAllSubTasks())) {
-            System.out.println("Файл загружен корректно.");
-        } else {
-            System.out.println("Ошибка загрузки файла");
-        }
     }
 
     public static Task fromString(String value) {
@@ -41,20 +22,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         int id = parseInt(parameters[0]);
         Status status = Status.valueOf(parameters[3]);
         TaskType type = TaskType.valueOf(parameters[1]);
+        LocalDateTime localDateTime = LocalDateTime.parse(parameters[5]);
+        Duration duration = Duration.parse(parameters[6]);
         Task taskFromString = null;
         if (type == TaskType.TASK) {
-            taskFromString = new Task(parameters[2], parameters[4]);
+            taskFromString = new Task(parameters[2], parameters[4], localDateTime, duration);
             taskFromString.setId(id);
             taskFromString.setStatus(status);
+            taskFromString.getEndTime();
         } else if (type == TaskType.EPIC) {
             taskFromString = new Epic(parameters[2], parameters[4]);
             taskFromString.setId(id);
             taskFromString.setStatus(status);
         } else if (type == TaskType.SUBTASK) {
-            taskFromString = new SubTask(parameters[2], parameters[4]);
+            taskFromString = new SubTask(parameters[2], parameters[4], localDateTime, duration);
             taskFromString.setId(id);
             taskFromString.setStatus(status);
-            ((SubTask) taskFromString).setEpicId(parseInt(parameters[5]));
+            taskFromString.getEndTime();
+            ((SubTask) taskFromString).setEpicId(parseInt(parameters[8]));
         }
         return taskFromString;
     }
