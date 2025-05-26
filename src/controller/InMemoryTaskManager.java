@@ -144,35 +144,35 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskById(int id) {
+    public Optional<Task> getTaskById(int id) {
         if (!tasks.containsKey(id)) {
             System.out.println("Задача с таким Id отсутствует");
-            return null;
+            return Optional.empty();
         } else {
             historyManager.add(tasks.get(id));
-            return tasks.get(id);
+            return Optional.of(tasks.get(id));
         }
     }
 
     @Override
-    public Epic getEpicById(int id) {
+    public Optional<Epic> getEpicById(int id) {
         if (!epics.containsKey(id)) {
             System.out.println("Эпик с таким id отсутствует");
-            return null;
+            return Optional.empty();
         } else {
             historyManager.add(epics.get(id));
-            return epics.get(id);
+            return Optional.of(epics.get(id));
         }
     }
 
     @Override
-    public SubTask getSubTaskById(int id) {
+    public Optional<SubTask> getSubTaskById(int id) {
         if (!subTasks.containsKey(id)) {
             System.out.println("Подзадача с таким id отсутствует");
-            return null;
+            return Optional.empty();
         } else {
             historyManager.add(subTasks.get(id));
-            return subTasks.get(id);
+            return Optional.of(subTasks.get(id));
         }
     }
 
@@ -286,6 +286,7 @@ public class InMemoryTaskManager implements TaskManager {
         return priorityList;
     }
 
+    @Override
     public boolean intersection(Task task) {
         Set<Task> tasks = getPrioritizedTasks();
         boolean intersection = false;

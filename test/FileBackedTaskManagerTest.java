@@ -54,10 +54,18 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         manager.createSubTask(subTask, 2, Status.NEW);
         BufferedReader br = new BufferedReader(new FileReader(file));
         br.readLine();
-        assertEquals(manager.getTaskById(0).toString(), br.readLine());
-        assertEquals(manager.getTaskById(1).toString(), br.readLine());
-        assertEquals(manager.getEpicById(2).toString(), br.readLine());
-        assertEquals(manager.getSubTaskById(3).toString(), br.readLine());
+        assertEquals(manager.getTaskById(0)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .toString(), br.readLine());
+        assertEquals(manager.getTaskById(1)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .toString(), br.readLine());
+        assertEquals(manager.getEpicById(2)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .toString(), br.readLine());
+        assertEquals(manager.getSubTaskById(3)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .toString(), br.readLine());
     }
 
     @Test

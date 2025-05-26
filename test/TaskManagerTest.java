@@ -59,7 +59,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(6, manager.getAllSubTasks().size(), "Подзадачи добавлены некорректно");
         assertEquals(3, manager.getAllEpicSubTasks(0).size(), "Подзадачи не добавлены в Эпик 1");
         assertEquals(3, manager.getAllEpicSubTasks(1).size(), "Подзадачи не добавлены в Эпик 2");
-        assertEquals(Status.IN_PROGRESS, manager.getEpicById(0).getStatus(), "Статус эпика некорректный");
+        assertEquals(Status.IN_PROGRESS, manager.getEpicById(0)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .getStatus(), "Статус эпика некорректный");
         assertEquals(10, manager.getPrioritizedTasks().size(),
                 "Список задач по приоритету некорректный");
         manager.deleteTaskById(2);
@@ -75,7 +77,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.deleteAllSubTasks();
         assertTrue(manager.getAllEpicSubTasks(0).isEmpty(),
                 "Подадачи не удалены из списка подзадач эпика");
-        assertEquals(Status.NEW, manager.getEpicById(0).getStatus(), "Статус эпика обновлён некорректно");
+        assertEquals(Status.NEW, manager.getEpicById(0)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .getStatus(), "Статус эпика обновлён некорректно");
         manager.deleteAllTasks();
         manager.deleteAllEpics();
         assertTrue(manager.getAllTasks().isEmpty(), "Задачи удалены некорректно");
@@ -94,18 +98,22 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.createTask(task, Status.NEW);
         manager.createEpic(epic);
         manager.createSubTask(subTask, 1, Status.NEW);
-        assertEquals(task, manager.getTaskById(0));
-        assertEquals(epic, manager.getEpicById(1));
-        assertEquals(subTask, manager.getSubTaskById(2));
+        assertEquals(task, manager.getTaskById(0)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена")));
+        assertEquals(epic, manager.getEpicById(1)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена")));
+        assertEquals(subTask, manager.getSubTaskById(2)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена")));
     }
 
     @Test
     void testFieldsAfterAddTask() { //Тест на совпадение полей после добавления задачи
-        Task firstTask = new Task("Задача", "Подзадача");
+        Task firstTask = new Task("Задача", "Подзадача",
+                LocalDateTime.of(2025, Month.MAY, 2, 10, 0), Duration.ofHours(1));
         firstTask.setId(0);
         firstTask.setStatus(Status.NEW);
         manager.createTask(firstTask, Status.NEW);
-        Task task = manager.getTaskById(0);
+        Task task = manager.getTaskById(0).orElseThrow(() -> new RuntimeException("Задача не найдена"));
         assertEquals(firstTask.getId(), task.getId());
         assertEquals(firstTask.getStatus(), task.getStatus());
         assertEquals(firstTask.getName(), task.getName());
@@ -119,7 +127,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Task taskCreateId = new Task("Задача", "id задан");
         taskCreateId.setId(5);
         manager.createTask(taskCreateId, Status.NEW);
-        assertNull(manager.getTaskById(5));
+        assertNull(manager.getTaskById(5).orElse(null));
         assertNotNull(manager.getTaskById(0));
         assertNotNull(manager.getTaskById(1));
     }
@@ -156,23 +164,27 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.createSubTask(subTask1, 0, Status.NEW);
         manager.createSubTask(subTask2, 0, Status.NEW);
         manager.createSubTask(subTask3, 0, Status.NEW);
-        assertEquals(Status.NEW, manager.getEpicById(0).getStatus(),
-                "Статус NEW рассчитан некорректно");
+        assertEquals(Status.NEW, manager.getEpicById(0)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .getStatus(), "Статус NEW рассчитан некорректно");
         manager.updateSubTask(subTask1, 0, 1, Status.DONE);
         manager.updateSubTask(subTask2, 0, 2, Status.DONE);
         manager.updateSubTask(subTask3, 0, 3, Status.DONE);
-        assertEquals(Status.DONE, manager.getEpicById(0).getStatus(),
-                "Статус DONE рассчитан некорректно");
+        assertEquals(Status.DONE, manager.getEpicById(0)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .getStatus(), "Статус DONE рассчитан некорректно");
         manager.updateSubTask(subTask1, 0, 1, Status.IN_PROGRESS);
         manager.updateSubTask(subTask2, 0, 2, Status.IN_PROGRESS);
         manager.updateSubTask(subTask3, 0, 3, Status.IN_PROGRESS);
-        assertEquals(Status.IN_PROGRESS, manager.getEpicById(0).getStatus(),
-                "Статус IN_PROGRESS рассчитан некорректно");
+        assertEquals(Status.IN_PROGRESS, manager.getEpicById(0)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .getStatus(), "Статус IN_PROGRESS рассчитан некорректно");
         manager.updateSubTask(subTask1, 0, 1, Status.NEW);
         manager.updateSubTask(subTask2, 0, 2, Status.DONE);
         manager.updateSubTask(subTask3, 0, 3, Status.DONE);
-        assertEquals(Status.IN_PROGRESS, manager.getEpicById(0).getStatus(),
-                "Статус IN_PROGRESS рассчитан некорректно");
+        assertEquals(Status.IN_PROGRESS, manager.getEpicById(0)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"))
+                .getStatus(), "Статус IN_PROGRESS рассчитан некорректно");
     }
 
     @Test
