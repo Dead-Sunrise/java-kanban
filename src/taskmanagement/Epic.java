@@ -1,9 +1,11 @@
 package taskmanagement;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private ArrayList<SubTask> subTaskList = new ArrayList<>();
+    private LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description);
@@ -26,5 +28,19 @@ public class Epic extends Task {
 
     public void deleteSubTask(SubTask subTask) {
         subTaskList.remove(subTask);
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.EPIC;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 }

@@ -1,27 +1,38 @@
 import controller.InMemoryTaskManager;
 import taskmanagement.Status;
-import controller.TaskManager;
 import taskmanagement.Epic;
 import taskmanagement.SubTask;
 import taskmanagement.Task;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 public class Main {
     public static void main(String[] args) {
         InMemoryTaskManager manager = new InMemoryTaskManager();
         System.out.println("Создаю две задачи, два эпика, три подзадачи к первому эпику, одна ко второму:");
         System.out.println("");
-        manager.createTask(new Task("Задача 1", "Описание"), Status.NEW);
-        manager.createTask(new Task("Задача 2", "Описание"), Status.IN_PROGRESS);
+        manager.createTask(new Task("Задача 1", "Описание", Status.NEW,
+                LocalDateTime.of(2025, Month.MAY, 1, 10, 0),
+                Duration.ofHours(1)));
+        manager.createTask(new Task("Задача 2", "Описание", Status.IN_PROGRESS,
+                LocalDateTime.of(2025, Month.MAY, 2, 10, 0),
+                Duration.ofHours(1)));
         manager.createEpic(new Epic("Эпик 1", "Описание эпика 1"));
         manager.createEpic(new Epic("Эпик 2", "Описание эпика 2"));
-        manager.createSubTask(new SubTask("Подзадача 1 Эпик 1", "Описание подзадачи"),
-                2, Status.NEW);
-        manager.createSubTask(new SubTask("Подзадача 2 Эпик 1", "Описание подзадачи"), 2,
-                Status.DONE);
-        manager.createSubTask(new SubTask("Подзадача 3 Эпик 1", "Описание подзадачи"), 2,
-                Status.IN_PROGRESS);
-        manager.createSubTask(new SubTask("Подзадача 1 Эпик 2", "Описание подзадачи"), 3,
-                Status.DONE);
+        manager.createSubTask(new SubTask("Подзадача 1 Эпик 1", "Описание подзадачи", Status.NEW, 2,
+                LocalDateTime.of(2025, Month.MAY, 3, 10, 0),
+                Duration.ofHours(1)));
+        manager.createSubTask(new SubTask("Подзадача 2 Эпик 1", "Описание подзадачи", Status.DONE, 2,
+                LocalDateTime.of(2025, Month.MAY, 4, 10, 0),
+                Duration.ofHours(1)));
+        manager.createSubTask(new SubTask("Подзадача 3 Эпик 1", "Описание подзадачи", Status.IN_PROGRESS, 2,
+                LocalDateTime.of(2025, Month.MAY, 5, 10, 0),
+                Duration.ofHours(1)));
+        manager.createSubTask(new SubTask("Подзадача 1 Эпик 2", "Описание подзадачи", Status.DONE, 3,
+                LocalDateTime.of(2025, Month.MAY, 6, 10, 0),
+                Duration.ofHours(1)));
         System.out.println(manager.getAllTasks());
         System.out.println(manager.getAllEpics());
         System.out.println(manager.getAllSubTasks());
@@ -29,12 +40,15 @@ public class Main {
         System.out.println("Изменяю название и статус у одной задачи и двух подзадач," +
                 " вывожу список подзадач первого эпика. " + "Получаю 11 задач по id и вывожу историю просмотров");
         System.out.println("");
-        manager.updateTask(new Task("Новая задача 1", "Описание"),
-                1, Status.DONE);
-        manager.updateSubTask(new SubTask("Новая подзадача 2", "Описание"),
-                2, 5, Status.IN_PROGRESS);
-        manager.updateSubTask(new SubTask("Новая подзадача 3", "Описание"),
-                2, 6, Status.NEW);
+        manager.updateTask(new Task("Новая задача 1", "Описание", Status.DONE,
+                LocalDateTime.of(2025, Month.MAY, 10, 10, 0),
+                Duration.ofHours(1)), 1, Status.DONE);
+        manager.updateSubTask(new SubTask("Новая подзадача 2", "Описание", Status.IN_PROGRESS, 2,
+                LocalDateTime.of(2025, Month.MAY, 7, 10, 0),
+                Duration.ofHours(1)), 2, 5, Status.IN_PROGRESS);
+        manager.updateSubTask(new SubTask("Новая подзадача 3", "Описание", Status.NEW, 2,
+                LocalDateTime.of(2025, Month.MAY, 8, 10, 0),
+                Duration.ofHours(1)), 2, 6, Status.NEW);
         System.out.println(manager.getAllTasks());
         System.out.println(manager.getAllEpics());
         System.out.println(manager.getAllSubTasks());
