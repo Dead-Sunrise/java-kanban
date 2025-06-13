@@ -41,17 +41,17 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     @Test
     void testSavingTasksToFile() throws IOException { //тест сохранения задач с разными типами в файл
         manager = new FileBackedTaskManager(file.toPath());
-        Task task1 = new Task("Задача 1", "Описание 1",
+        Task task1 = new Task("Задача 1", "Описание 1", Status.NEW,
                 LocalDateTime.of(2025, Month.MAY, 1, 10, 0), Duration.ofHours(1));
-        Task task2 = new Task("Задача 2", "Описание 2",
+        Task task2 = new Task("Задача 2", "Описание 2", Status.NEW,
                 LocalDateTime.of(2025, Month.MAY, 2, 10, 0), Duration.ofHours(1));
         Epic epic = new Epic("Эпик 1", "Описание 1");
-        SubTask subTask = new SubTask("Подзадача 1", "Описание 1",
+        SubTask subTask = new SubTask("Подзадача 1", "Описание 1", Status.NEW, 2,
                 LocalDateTime.of(2025, Month.MAY, 3, 10, 0), Duration.ofHours(1));
-        manager.createTask(task1, Status.NEW);
-        manager.createTask(task2, Status.NEW);
+        manager.createTask(task1);
+        manager.createTask(task2);
         manager.createEpic(epic);
-        manager.createSubTask(subTask, 2, Status.NEW);
+        manager.createSubTask(subTask);
         BufferedReader br = new BufferedReader(new FileReader(file));
         br.readLine();
         assertEquals(manager.getTaskById(0)
@@ -71,17 +71,17 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     @Test
     void testSaveAndWriteFromFile() { //тест сохранения, затем записи задач из файла
         manager = new FileBackedTaskManager(file.toPath());
-        Task task1 = new Task("Задача 1", "Описание 1",
+        Task task1 = new Task("Задача 1", "Описание 1", Status.NEW,
                 LocalDateTime.of(2025, Month.MAY, 1, 10, 0), Duration.ofHours(1));
-        Task task2 = new Task("Задача 2", "Описание 2",
+        Task task2 = new Task("Задача 2", "Описание 2", Status.NEW,
                 LocalDateTime.of(2025, Month.MAY, 2, 10, 0), Duration.ofHours(1));
         Epic epic = new Epic("Эпик 1", "Описание 1");
-        SubTask subTask = new SubTask("Подзадача 1", "Описание 1",
+        SubTask subTask = new SubTask("Подзадача 1", "Описание 1", Status.NEW, 2,
                 LocalDateTime.of(2025, Month.MAY, 3, 10, 0), Duration.ofHours(1));
-        manager.createTask(task1, Status.NEW);
-        manager.createTask(task2, Status.NEW);
+        manager.createTask(task1);
+        manager.createTask(task2);
         manager.createEpic(epic);
-        manager.createSubTask(subTask, 2, Status.NEW);
+        manager.createSubTask(subTask);
         FileBackedTaskManager newManager = FileBackedTaskManager.loadFromFile(file);
         assertEquals(manager.getTaskById(0), newManager.getTaskById(0));
         assertEquals(manager.getTaskById(1), newManager.getTaskById(1));

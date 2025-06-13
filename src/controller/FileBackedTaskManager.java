@@ -26,20 +26,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         Duration duration = Duration.parse(parameters[6]);
         Task taskFromString = null;
         if (type == TaskType.TASK) {
-            taskFromString = new Task(parameters[2], parameters[4], localDateTime, duration);
+            taskFromString = new Task(parameters[2], parameters[4], status, localDateTime, duration);
             taskFromString.setId(id);
-            taskFromString.setStatus(status);
             taskFromString.getEndTime();
         } else if (type == TaskType.EPIC) {
             taskFromString = new Epic(parameters[2], parameters[4]);
             taskFromString.setId(id);
             taskFromString.setStatus(status);
         } else if (type == TaskType.SUBTASK) {
-            taskFromString = new SubTask(parameters[2], parameters[4], localDateTime, duration);
+            taskFromString = new SubTask(parameters[2], parameters[4], status, parseInt(parameters[8]), localDateTime, duration);
             taskFromString.setId(id);
-            taskFromString.setStatus(status);
             taskFromString.getEndTime();
-            ((SubTask) taskFromString).setEpicId(parseInt(parameters[8]));
         }
         return taskFromString;
     }
@@ -68,11 +65,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             while (br.ready()) {
                 Task task = fromString(br.readLine());
                 if (task.getTaskType() == TaskType.TASK) {
-                    fileBackedTaskManager.createTask(task, task.getStatus());
+                    fileBackedTaskManager.createTask(task);
                 } else if (task.getTaskType() == TaskType.EPIC) {
                     fileBackedTaskManager.createEpic((Epic) task);
                 } else if (task.getTaskType() == TaskType.SUBTASK) {
-                    fileBackedTaskManager.createSubTask((SubTask) task, ((SubTask) task).getEpicId(), task.getStatus());
+                    fileBackedTaskManager.createSubTask((SubTask) task);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -102,8 +99,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     @Override
-    public void createTask(Task task, Status status) {
-        super.createTask(task, status);
+    public void createTask(Task task) {
+        super.createTask(task);
         save();
     }
 
@@ -114,8 +111,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     @Override
-    public void createSubTask(SubTask subTask, int epicId, Status status) {
-        super.createSubTask(subTask, epicId, status);
+    public void createSubTask(SubTask subTask) {
+        super.createSubTask(subTask);
         save();
     }
 

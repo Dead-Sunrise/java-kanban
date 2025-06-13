@@ -65,12 +65,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createTask(Task task, Status status) {
+    public void createTask(Task task) {
         if (intersection(task)) {
             System.out.println("Время выполнения задачи пересекается с другими задачами.");
         } else {
             task.setId(currentId++);
-            task.setStatus(status);
             tasks.put(task.getId(), task);
             if (task.getStartTime() != null) {
                 priorityList.add(task);
@@ -86,18 +85,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createSubTask(SubTask subTask, int epicId, Status status) {
+    public void createSubTask(SubTask subTask) {
         if (intersection(subTask)) {
             System.out.println("Время выполнения задачи пересекается с другими задачами.");
         } else {
             subTask.setId(currentId++);
-            subTask.setStatus(status);
-            subTask.setEpicId(epicId);
             subTasks.put(subTask.getId(), subTask);
             if (subTask.getStartTime() != null) {
                 priorityList.add(subTask);
             }
-            Epic epic = epics.get(subTask.getEpicId());
+            int epicId = subTask.getEpicId();
+            Epic epic = epics.get(epicId);
             epic.addToSubTask(subTask);
             epic.setStatus(setEpicStatus(epicId));
             epicSetTime(epic);
@@ -146,7 +144,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Optional<Task> getTaskById(int id) {
         if (!tasks.containsKey(id)) {
-            System.out.println("Задача с таким Id отсутствует");
             return Optional.empty();
         } else {
             historyManager.add(tasks.get(id));
@@ -157,7 +154,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Optional<Epic> getEpicById(int id) {
         if (!epics.containsKey(id)) {
-            System.out.println("Эпик с таким id отсутствует");
             return Optional.empty();
         } else {
             historyManager.add(epics.get(id));
@@ -168,7 +164,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Optional<SubTask> getSubTaskById(int id) {
         if (!subTasks.containsKey(id)) {
-            System.out.println("Подзадача с таким id отсутствует");
             return Optional.empty();
         } else {
             historyManager.add(subTasks.get(id));

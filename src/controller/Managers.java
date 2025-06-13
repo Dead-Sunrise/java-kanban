@@ -1,7 +1,7 @@
 package controller;
 
-public final class Managers {
-    private Managers() {
+public class Managers {
+    public Managers() {
     }
 
     public static TaskManager getDefault() {
@@ -12,3 +12,5 @@ public final class Managers {
         return new InMemoryHistoryManager();
     }
 }
+
+
