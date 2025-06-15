@@ -5,9 +5,11 @@ import taskmanagement.Status;
 import taskmanagement.SubTask;
 import taskmanagement.Task;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 
 public interface TaskManager {
     Map<Integer, Task> getAllTasks();
@@ -22,11 +24,11 @@ public interface TaskManager {
 
     void deleteAllSubTasks();
 
-    void createTask(Task task, Status status);
+    void createTask(Task task);
 
     void createEpic(Epic epic);
 
-    void createSubTask(SubTask subTask, int epicId, Status status);
+    void createSubTask(SubTask subTask);
 
     void updateTask(Task task, int taskId, Status status);
 
@@ -34,11 +36,11 @@ public interface TaskManager {
 
     void updateSubTask(SubTask subTask, int epicId, int id, Status status);
 
-    Task getTaskById(int id);
+    Optional<Task> getTaskById(int id);
 
-    Epic getEpicById(int id);
+    Optional<Epic> getEpicById(int id);
 
-    SubTask getSubTaskById(int id);
+    Optional<SubTask> getSubTaskById(int id);
 
     void deleteTaskById(int id);
 
@@ -51,4 +53,8 @@ public interface TaskManager {
     ArrayList<SubTask> getAllEpicSubTasks(int id);
 
     public List<Task> getHistory();
+
+    public Set<Task> getPrioritizedTasks();
+
+    public boolean intersection(Task task);
 }
