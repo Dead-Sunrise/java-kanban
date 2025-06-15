@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 import static java.lang.Integer.parseInt;
 
-public class FileBackedTaskManager extends InMemoryTaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     public Path path;
     private static final String HEAD = "id,type,name,status,description,startTime,duration,endTime,epic\n";
 
@@ -39,14 +39,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 taskFromString = new Task(parameters[2], parameters[4], status, localDateTime, duration);
                 taskFromString.setId(id);
                 taskFromString.getEndTime();
+                break;
             case TaskType.EPIC:
                 taskFromString = new Epic(parameters[2], parameters[4]);
                 taskFromString.setId(id);
                 taskFromString.setStatus(status);
+                break;
             case TaskType.SUBTASK:
                 taskFromString = new SubTask(parameters[2], parameters[4], status, parseInt(parameters[8]), localDateTime, duration);
                 taskFromString.setId(id);
                 taskFromString.getEndTime();
+                break;
         }
         return taskFromString;
     }
