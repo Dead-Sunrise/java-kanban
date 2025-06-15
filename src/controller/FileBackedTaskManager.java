@@ -1,15 +1,24 @@
 package controller;
 
-import taskmanagement.*;
+import taskmanagement.Epic;
+import taskmanagement.Status;
+import taskmanagement.Task;
+import taskmanagement.TaskType;
+import taskmanagement.SubTask;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static java.lang.Integer.parseInt;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     public Path path;
     private static final String HEAD = "id,type,name,status,description,startTime,duration,endTime,epic\n";
 
@@ -25,18 +34,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         LocalDateTime localDateTime = LocalDateTime.parse(parameters[5]);
         Duration duration = Duration.parse(parameters[6]);
         Task taskFromString = null;
-        if (type == TaskType.TASK) {
-            taskFromString = new Task(parameters[2], parameters[4], status, localDateTime, duration);
-            taskFromString.setId(id);
-            taskFromString.getEndTime();
-        } else if (type == TaskType.EPIC) {
-            taskFromString = new Epic(parameters[2], parameters[4]);
-            taskFromString.setId(id);
-            taskFromString.setStatus(status);
-        } else if (type == TaskType.SUBTASK) {
-            taskFromString = new SubTask(parameters[2], parameters[4], status, parseInt(parameters[8]), localDateTime, duration);
-            taskFromString.setId(id);
-            taskFromString.getEndTime();
+        switch (type) {
+            case TaskType.TASK:
+                taskFromString = new Task(parameters[2], parameters[4], status, localDateTime, duration);
+                taskFromString.setId(id);
+                taskFromString.getEndTime();
+            case TaskType.EPIC:
+                taskFromString = new Epic(parameters[2], parameters[4]);
+                taskFromString.setId(id);
+                taskFromString.setStatus(status);
+            case TaskType.SUBTASK:
+                taskFromString = new SubTask(parameters[2], parameters[4], status, parseInt(parameters[8]), localDateTime, duration);
+                taskFromString.setId(id);
+                taskFromString.getEndTime();
         }
         return taskFromString;
     }

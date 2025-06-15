@@ -15,7 +15,7 @@ import java.time.Month;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class HistoryTaskHandlerTest extends BaseHttpHandlerTest{
+public class HistoryTaskHandlerTest extends BaseHttpHandlerTest {
     @Test
     void getHistoryTaskTest() throws IOException, InterruptedException { //тест получения истории просмотров
         Epic epic = new Epic("Эпик 1", "Описание");

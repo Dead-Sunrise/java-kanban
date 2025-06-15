@@ -5,7 +5,11 @@ import taskmanagement.Status;
 import taskmanagement.SubTask;
 import taskmanagement.Task;
 
-import java.util.*;
+import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Optional;
 
 public interface TaskManager {
     Map<Integer, Task> getAllTasks();
